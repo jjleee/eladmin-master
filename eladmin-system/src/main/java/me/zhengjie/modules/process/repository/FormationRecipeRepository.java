@@ -14,11 +14,11 @@ import java.util.List;
  */
 public interface FormationRecipeRepository extends JpaRepository<FormationRecipe, String>, JpaSpecificationExecutor {
     /**
-     * 查找可用
-     *
+     * 根据类型查找所有有效配方
      * @param valid
+     * @param recipeType
      * @return
      */
-    List<FormationRecipe> findAllByValid(Boolean valid);
+    List<FormationRecipe> findAllByValidAndRecipeType(Boolean valid,Integer recipeType);
 
 }

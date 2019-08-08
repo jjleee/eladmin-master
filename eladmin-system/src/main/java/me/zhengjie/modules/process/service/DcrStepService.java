@@ -1,17 +1,21 @@
 package me.zhengjie.modules.process.service;
 
-import me.zhengjie.modules.process.domain.DcrRecipe;
-import me.zhengjie.modules.process.service.dto.DcrRecipeDTO;
+import me.zhengjie.modules.process.domain.DcrStep;
+import me.zhengjie.modules.process.service.dto.DcrStepDTO;
+import me.zhengjie.modules.system.domain.Permission;
+import me.zhengjie.modules.system.service.dto.PermissionDTO;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
+import java.util.List;
+
 /**
- * @author jie
- * @date 2019-04-09
+ * @author lijj
+ * @date 2019-08-05
  */
-@CacheConfig(cacheNames = "dcrRecipe")
-public interface DcrRecipeService {
+@CacheConfig(cacheNames = "dcrStep")
+public interface DcrStepService {
 
     /**
      * findById
@@ -20,7 +24,7 @@ public interface DcrRecipeService {
      * @return
      */
     @Cacheable(key = "#p0")
-    DcrRecipeDTO findById(String id);
+    DcrStepDTO findById(String id);
 
     /**
      * create
@@ -29,7 +33,7 @@ public interface DcrRecipeService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    DcrRecipeDTO create(DcrRecipeDTO resources);
+    DcrStepDTO create(DcrStep resources);
 
     /**
      * update
@@ -37,7 +41,7 @@ public interface DcrRecipeService {
      * @param resources
      */
     @CacheEvict(allEntries = true)
-    void update(DcrRecipeDTO resources);
+    void update(DcrStep resources);
 
     /**
      * delete

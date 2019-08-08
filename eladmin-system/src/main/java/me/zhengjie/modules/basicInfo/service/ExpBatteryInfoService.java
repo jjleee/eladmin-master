@@ -1,17 +1,17 @@
-package me.zhengjie.modules.process.service;
+package me.zhengjie.modules.basicInfo.service;
 
-import me.zhengjie.modules.process.domain.DcrRecipe;
-import me.zhengjie.modules.process.service.dto.DcrRecipeDTO;
+import me.zhengjie.modules.basicInfo.domain.ExpBatteryInfo;
+import me.zhengjie.modules.basicInfo.service.dto.ExpBatteryInfoDTO;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
 /**
  * @author jie
- * @date 2019-04-09
+ * @date 2019-04-01
  */
-@CacheConfig(cacheNames = "dcrRecipe")
-public interface DcrRecipeService {
+@CacheConfig(cacheNames = "expBatteryInfo")
+public interface ExpBatteryInfoService {
 
     /**
      * findById
@@ -20,7 +20,7 @@ public interface DcrRecipeService {
      * @return
      */
     @Cacheable(key = "#p0")
-    DcrRecipeDTO findById(String id);
+    ExpBatteryInfoDTO findById(Long id);
 
     /**
      * create
@@ -29,7 +29,7 @@ public interface DcrRecipeService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    DcrRecipeDTO create(DcrRecipeDTO resources);
+    ExpBatteryInfoDTO create(ExpBatteryInfo resources);
 
     /**
      * update
@@ -37,7 +37,7 @@ public interface DcrRecipeService {
      * @param resources
      */
     @CacheEvict(allEntries = true)
-    void update(DcrRecipeDTO resources);
+    void update(ExpBatteryInfoDTO resources);
 
     /**
      * delete
@@ -45,5 +45,5 @@ public interface DcrRecipeService {
      * @param id
      */
     @CacheEvict(allEntries = true)
-    void delete(String id);
+    void delete(Long id);
 }

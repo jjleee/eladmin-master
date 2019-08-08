@@ -69,8 +69,8 @@ public class DivisionRecipeController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/divisionRecipe/names")
-    public ResponseEntity getDivisionNames() {
-        return new ResponseEntity(divisionRecipeQueryService.queryAllName(), HttpStatus.OK);
+    @GetMapping(value = "/divisionRecipe/names/{type}")
+    public ResponseEntity getDivisionNames(@PathVariable Integer type) {
+        return new ResponseEntity(divisionRecipeQueryService.queryAllName(type), HttpStatus.OK);
     }
 }

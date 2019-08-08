@@ -1,14 +1,18 @@
 package me.zhengjie.modules.process.service.query;
 
+import me.zhengjie.modules.process.domain.DcrStep;
+import me.zhengjie.modules.process.repository.DcrStepRepository;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.modules.process.domain.DcrRecipe;
 import me.zhengjie.modules.process.service.dto.DcrRecipeDTO;
 import me.zhengjie.modules.process.repository.DcrRecipeRepository;
 import me.zhengjie.modules.process.service.mapper.DcrRecipeMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +42,9 @@ public class DcrRecipeQueryService {
     private DcrRecipeRepository dcrRecipeRepository;
 
     @Autowired
+    private DcrStepRepository dcrStepRepository;
+
+    @Autowired
     private DcrRecipeMapper dcrRecipeMapper;
 
     /**
@@ -45,8 +53,8 @@ public class DcrRecipeQueryService {
      * @return
      */
     @Cacheable(keyGenerator = "keyGenerator")
-    public Object queryAllName() {
-        List<DcrRecipe> all = dcrRecipeRepository.findAll();
+    public Object queryAllName(Integer type) {
+        List<DcrRecipe> all = dcrRecipeRepository.findAllByValidAndRecipeType(true,type);
         List<String> allName = all.stream().map(e -> e.getName()).collect(Collectors.toList());
         return allName;
     }
@@ -58,6 +66,24 @@ public class DcrRecipeQueryService {
     public Object queryAll(DcrRecipeDTO dcrRecipe, Pageable pageable) {
         Page<DcrRecipe> page = dcrRecipeRepository.findAll(new Spec(dcrRecipe), pageable);
         return PageUtil.toPage(page.map(dcrRecipeMapper::toDto));
+    }
+
+    @Cacheable(keyGenerator = "keyGenerator")
+    public Object queryAllPlus(DcrRecipeDTO resource, Pageable pageable) {
+        Page<DcrRecipe> page = dcrRecipeRepository.findAll(new Spec(resource), pageable);
+        List<DcrRecipeDTO> dtos = new ArrayList<>();
+        for (Iterator<DcrRecipe> iterator = page.iterator(); iterator.hasNext(); ) {
+            DcrRecipe next = iterator.next();
+            if (next.getValid()) {
+                DcrRecipeDTO dcrRecipeDTO = new DcrRecipeDTO();
+                BeanUtils.copyProperties(next, dcrRecipeDTO);
+                List<DcrStep> byRecipeId = dcrStepRepository.findByRecipeId(next.getId());
+                dcrRecipeDTO.setSteps(byRecipeId);
+                dtos.add(dcrRecipeDTO);
+            }
+        }
+        Page<DcrRecipeDTO> dtoPage = new PageImpl(dtos, pageable, dtos.size());
+        return PageUtil.toPage(dtoPage);
     }
 
     /**
@@ -86,12 +112,6 @@ public class DcrRecipeQueryService {
                  * 模糊
                  */
                 list.add(cb.like(root.get("name").as(String.class), "%" + dcrRecipe.getName() + "%"));
-            }
-            if (!ObjectUtils.isEmpty(dcrRecipe.getMethodName())) {
-                /**
-                 * 模糊
-                 */
-                list.add(cb.like(root.get("method_name").as(String.class), "%" + dcrRecipe.getMethodName() + "%"));
             }
             Predicate[] p = new Predicate[list.size()];
             return cb.and(list.toArray(p));

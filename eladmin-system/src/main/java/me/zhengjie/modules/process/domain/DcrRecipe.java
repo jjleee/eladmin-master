@@ -1,9 +1,13 @@
 package me.zhengjie.modules.process.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * @author jie
@@ -18,9 +22,8 @@ public class DcrRecipe implements Serializable {
      * ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private String id;
 
     /**
      * 配方名称
@@ -29,52 +32,46 @@ public class DcrRecipe implements Serializable {
     private String name;
 
     /**
-     * 测试方法
+     * 配方类型
      */
-    @Column(name = "method_name")
-    private String methodName;
+    @Column(name = "recipe_type")
+    private Integer recipeType;
 
     /**
-     * I1
+     * 版本号
      */
-    @Column(name = "current_first")
-    private Double currentFirst;
+    @Column(name = "version")
+    private Integer version;
 
     /**
-     * I2
+     * 状态
      */
-    @Column(name = "current_second")
-    private Double currentSecond;
+    @Column(name = "valid")
+    private Boolean valid;
 
     /**
-     * T1
+     * 创建人
      */
-    @Column(name = "time_first")
-    private Double timeFirst;
+    @Column(name = "creator_Name")
+    private String creatorName;
 
     /**
-     * T2
+     * 创建时间
      */
-    @Column(name = "time_second")
-    private Double timeSecond;
+    @CreationTimestamp
+    @Column(name = "create_time")
+    private Timestamp createTime;
+
     /**
-     * t1
+     * 更新者
      */
-    @Column(name = "time_first_dot")
-    private Double timeFirstDot;
+    @Column(name = "updater_name")
+    private String updaterName;
+
     /**
-     * t2
+     * 最近更新时间
      */
-    @Column(name = "time_second_dot")
-    private Double timeSecondDot;
-    /**
-     * 上限电压
-     */
-    @Column(name = "upper_limit_voltage")
-    private Double upperLimitVoltage;
-    /**
-     * 下限电压
-     */
-    @Column(name = "lower_limit_voltage")
-    private Double lowerLimitVoltage;
+    @UpdateTimestamp
+    @Column(name = "update_time")
+    private Timestamp updateTime;
 }

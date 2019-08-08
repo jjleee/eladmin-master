@@ -81,8 +81,8 @@ public class FormationRecipeQueryService {
      * @return
      */
     @Cacheable(keyGenerator = "keyGenerator")
-    public Object queryAllName() {
-        List<FormationRecipe> all = formationRecipeRepository.findAllByValid(true);
+    public Object queryAllName(Integer type) {
+        List<FormationRecipe> all = formationRecipeRepository.findAllByValidAndRecipeType(true,type);
         List<String> allName = all.stream().map(e -> e.getName()).collect(Collectors.toList());
         return allName;
     }

@@ -17,5 +17,5 @@ public interface DivisionRecipeRepository extends JpaRepository<DivisionRecipe, 
      * @param valid
      * @return
      */
-    List<DivisionRecipe> findByValid(Boolean valid);
+    List<DivisionRecipe> findByValidAndRecipeType(Boolean valid,Integer recipeType);
 }

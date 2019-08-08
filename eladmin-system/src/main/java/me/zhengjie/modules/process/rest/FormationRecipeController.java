@@ -70,9 +70,9 @@ public class FormationRecipeController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/formationRecipe/names")
-    public ResponseEntity getFormationNames() {
-        return new ResponseEntity(formationRecipeQueryService.queryAllName(), HttpStatus.OK);
+    @GetMapping(value = "/formationRecipe/names/{type}")
+    public ResponseEntity getFormationNames(@PathVariable Integer type) {
+        return new ResponseEntity(formationRecipeQueryService.queryAllName(type), HttpStatus.OK);
     }
 
     @Log("复制FormationRecipe")

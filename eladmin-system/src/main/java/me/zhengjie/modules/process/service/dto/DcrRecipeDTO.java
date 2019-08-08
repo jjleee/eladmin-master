@@ -1,8 +1,12 @@
 package me.zhengjie.modules.process.service.dto;
 
 import lombok.Data;
+import me.zhengjie.modules.process.domain.DcrStep;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author jie
@@ -14,7 +18,7 @@ public class DcrRecipeDTO implements Serializable {
     /**
      * ID
      */
-    private Long id;
+    private String id;
 
     /**
      * 配方名称
@@ -22,43 +26,36 @@ public class DcrRecipeDTO implements Serializable {
     private String name;
 
     /**
-     * 测试方法
+     * 配方类型
      */
-    private String methodName;
+    private Integer recipeType;
 
     /**
-     * I1
+     * 版本号
      */
-    private Double currentFirst;
+    private Integer version;
 
     /**
-     * I2
+     * 状态
      */
-    private Double currentSecond;
+    private Boolean valid;
 
     /**
-     * T1
+     * 创建人
      */
-    private Double timeFirst;
+    private String creatorName;
+
+
+    private Timestamp createTime;
+
+    private Timestamp updateTime;
+    /**
+     * 更新者
+     */
+    private String updaterName;
 
     /**
-     * T2
+     * 包含工步
      */
-    private Double timeSecond;
-    /**
-     * t1
-     */
-    private Double timeFirstDot;
-    /**
-     * t2
-     */
-    private Double timeSecondDot;
-    /**
-     * 上限温度
-     */
-    private Double upperLimitVoltage;
-    /**
-     * 下限温度
-     */
-    private Double lowerLimitVoltage;
+    List<DcrStep> steps;
 }

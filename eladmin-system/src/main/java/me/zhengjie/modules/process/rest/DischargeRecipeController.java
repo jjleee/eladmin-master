@@ -68,8 +68,8 @@ public class DischargeRecipeController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/dischargeRecipe/names")
-    public ResponseEntity getDischargeNames() {
-        return new ResponseEntity(dischargeRecipeQueryService.queryAllName(), HttpStatus.OK);
+    @GetMapping(value = "/dischargeRecipe/names/{type}")
+    public ResponseEntity getDischargeNames(@PathVariable Integer type) {
+        return new ResponseEntity(dischargeRecipeQueryService.queryAllName(type), HttpStatus.OK);
     }
 }

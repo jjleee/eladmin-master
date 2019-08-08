@@ -112,8 +112,8 @@ public class DivisionRecipeQueryService {
      * @return
      */
     @Cacheable(keyGenerator = "keyGenerator")
-    public Object queryAllName() {
-        List<DivisionRecipe> all = divisionRecipeRepository.findByValid(true);
+    public Object queryAllName(Integer type) {
+        List<DivisionRecipe> all = divisionRecipeRepository.findByValidAndRecipeType(true,type);
         List<String> allName = all.stream().map(e -> e.getRecipeName()).collect(Collectors.toList());
         return allName;
     }

@@ -18,5 +18,5 @@ public interface DischargeRecipeRepository extends JpaRepository<DischargeRecipe
      * @param valid
      * @return
      */
-    List<DischargeRecipe> findByValid(Boolean valid);
+    List<DischargeRecipe> findByValidAndRecipeType(Boolean valid,Integer recipeType);
 }

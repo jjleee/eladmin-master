@@ -34,14 +34,14 @@ public class DcrRecipeController {
     @GetMapping(value = "/dcrRecipe")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity getDcrRecipes(DcrRecipeDTO resources, Pageable pageable) {
-        return new ResponseEntity(dcrRecipeQueryService.queryAll(resources, pageable), HttpStatus.OK);
+        return new ResponseEntity(dcrRecipeQueryService.queryAllPlus(resources, pageable), HttpStatus.OK);
     }
 
     @Log("新增DcrRecipe")
     @PostMapping(value = "/dcrRecipe")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity create(@Validated @RequestBody DcrRecipe resources) {
-        if (resources.getId() != null) {
+    public ResponseEntity create(@Validated @RequestBody DcrRecipeDTO resources) {
+        if (resources.getId() != null&& resources.getId() != "") {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
         }
         return new ResponseEntity(dcrRecipeService.create(resources), HttpStatus.CREATED);
@@ -50,7 +50,7 @@ public class DcrRecipeController {
     @Log("修改DcrRecipe")
     @PutMapping(value = "/dcrRecipe")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity update(@Validated @RequestBody DcrRecipe resources) {
+    public ResponseEntity update(@Validated @RequestBody DcrRecipeDTO resources) {
         if (resources.getId() == null) {
             throw new BadRequestException(ENTITY_NAME + " ID Can not be empty");
         }
@@ -61,13 +61,13 @@ public class DcrRecipeController {
     @Log("删除DcrRecipe")
     @DeleteMapping(value = "/dcrRecipe/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity delete(@PathVariable Long id) {
+    public ResponseEntity delete(@PathVariable String id) {
         dcrRecipeService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/dcrRecipe/names")
-    public ResponseEntity getDcrNames() {
-        return new ResponseEntity(dcrRecipeQueryService.queryAllName(), HttpStatus.OK);
+    @GetMapping(value = "/dcrRecipe/names/{type}")
+    public ResponseEntity getDcrNames(@PathVariable Integer type) {
+        return new ResponseEntity(dcrRecipeQueryService.queryAllName(type), HttpStatus.OK);
     }
 }

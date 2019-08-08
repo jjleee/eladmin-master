@@ -106,8 +106,8 @@ public class DischargeRecipeQueryService {
      * @return
      */
     @Cacheable(keyGenerator = "keyGenerator")
-    public Object queryAllName() {
-        List<DischargeRecipe> all = dischargeRecipeRepository.findByValid(true);
+    public Object queryAllName(Integer type) {
+        List<DischargeRecipe> all = dischargeRecipeRepository.findByValidAndRecipeType(true,type);
         List<String> allName = all.stream().map(e -> e.getRecipeName()).collect(Collectors.toList());
         return allName;
     }
