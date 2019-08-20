@@ -1,11 +1,11 @@
 package me.zhengjie.modules.rules.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.io.Serializable;
 
 /**
@@ -13,7 +13,8 @@ import java.io.Serializable;
  * @date 2019-04-09
  */
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "binning_rule")
 public class BinningRule implements Serializable {
 
@@ -22,50 +23,23 @@ public class BinningRule implements Serializable {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "rule_id")
+    private Long ruleId;
 
     /**
-     * 名称
+     * 等级
      */
-    @Column(name = "binning_name")
-    private String name;
+    @Column(name = "grade")
+    private String grade;
 
     /**
-     * 代码
+     * 规则内容
      */
-    @Column(name = "code")
-    private String code;
+    @Column(name = "expression")
+    private String expression;
 
-    /**
-     * 创建人
-     */
-    @Column(name = "creator_name")
-    private String creatorName;
-
-    /**
-     * 创建时间
-     */
-    @CreationTimestamp
-    @Column(name = "create_time")
-    private Timestamp createTime;
-
-    /**
-     * 更新时间
-     */
-    @UpdateTimestamp
-    @Column(name = "update_time")
-    private Timestamp updateTime;
-
-    /**
-     * 描述
-     */
-    @Column(name = "description")
-    private String description;
-
-    /**
-     * 电池型号
-     */
-    @Column(name = "battery_number")
-    private String batteryNumber;
+    @ManyToOne(fetch = FetchType.LAZY,targetEntity = BinningPlan.class,cascade=CascadeType.ALL)
+    @JoinColumn(name="plan_id")
+    @JsonIgnore
+    private BinningPlan plan;
 }

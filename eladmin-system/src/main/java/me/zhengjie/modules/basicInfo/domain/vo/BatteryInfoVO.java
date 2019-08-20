@@ -68,7 +68,7 @@ public class BatteryInfoVO implements Serializable {
     /**
      * 分档规则
      */
-    private String binningRuleName;
+    private String binningPlanName;
 
     /**
      * NG规则

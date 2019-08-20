@@ -4,8 +4,8 @@ spring:
     druid:
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: oracle.jdbc.OracleDriver
-      url: jdbc:oracle:thin:@192.168.1.179:1521:ORCL
-      username: DGIS
+      url: jdbc:oracle:thin:@192.168.1.180:1521:ORCL
+      username: c##DGIS
       password: dgis110
 
       # 初始化连接大小
@@ -59,4 +59,8 @@ jwt:
 
 #是否允许生成代码，生产环境设置为false
 generator:
+  enabled: true
+
+  #是否开启 swagger-ui
+swagger:
   enabled: true

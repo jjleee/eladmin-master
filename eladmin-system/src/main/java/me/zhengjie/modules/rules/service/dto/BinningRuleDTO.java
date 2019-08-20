@@ -13,42 +13,22 @@ import java.io.Serializable;
 public class BinningRuleDTO implements Serializable {
 
     /**
-     * ID
+     * ruleId
      */
-    private Long id;
+    private Long ruleId;
 
     /**
-     * 名称
+     * 等级
      */
-    private String name;
+    private String grade;
 
     /**
-     * 代码
+     * 规则内容
      */
-    private String code;
+    private String expression;
 
     /**
-     * 创建人
+     * 方案ID
      */
-    private String creatorName;
-
-    /**
-     * 创建时间
-     */
-    private Timestamp createTime;
-
-    /**
-     * 更新时间
-     */
-    private Timestamp updateTime;
-
-    /**
-     * 描述
-     */
-    private String description;
-
-    /**
-     * 电池型号
-     */
-    private String batteryNumber;
+    private Long planId;
 }

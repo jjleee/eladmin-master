@@ -43,12 +43,12 @@ public class BinningRuleServiceImpl implements BinningRuleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(BinningRule resources) {
-        Optional<BinningRule> optionalBinningRule = binningRuleRepository.findById(resources.getId());
-        ValidationUtil.isNull(optionalBinningRule, "BinningRule", "id", resources.getId());
+        Optional<BinningRule> optionalBinningRule = binningRuleRepository.findById(resources.getRuleId());
+        ValidationUtil.isNull(optionalBinningRule, "BinningRule", "id", resources.getRuleId());
 
         BinningRule binningRule = optionalBinningRule.get();
         // 此处需自己修改
-        resources.setId(binningRule.getId());
+        resources.setRuleId(binningRule.getRuleId());
         binningRuleRepository.save(resources);
     }
 

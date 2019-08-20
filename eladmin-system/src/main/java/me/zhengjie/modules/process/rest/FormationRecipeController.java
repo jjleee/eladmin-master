@@ -1,10 +1,8 @@
 package me.zhengjie.modules.process.rest;
 
-import cn.hutool.bloomfilter.filter.SDBMFilter;
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.exception.BadRequestException;
-import me.zhengjie.modules.process.domain.FormationRecipe;
-import me.zhengjie.modules.process.domain.WorkStepInfo;
+import me.zhengjie.modules.basicInfo.service.query.BatteryInfoQueryService;
 import me.zhengjie.modules.process.service.FormationRecipeService;
 import me.zhengjie.modules.process.service.dto.FormationRecipeDTO;
 import me.zhengjie.modules.process.service.query.FormationRecipeQueryService;
@@ -31,6 +29,9 @@ public class FormationRecipeController {
 
     @Autowired
     private FormationRecipeQueryService formationRecipeQueryService;
+
+    @Autowired
+    private BatteryInfoQueryService batteryInfoQueryService;
 
     private static final String ENTITY_NAME = "formationRecipe";
 
@@ -71,7 +72,7 @@ public class FormationRecipeController {
     }
 
     @GetMapping(value = "/formationRecipe/names/{type}")
-    public ResponseEntity getFormationNames(@PathVariable Integer type) {
+    public ResponseEntity getFormationNames(@Validated @PathVariable Integer type) {
         return new ResponseEntity(formationRecipeQueryService.queryAllName(type), HttpStatus.OK);
     }
 
@@ -81,4 +82,5 @@ public class FormationRecipeController {
     public ResponseEntity copy(@RequestParam(value = "id" ) String id,@RequestParam(value = "name") String name,Principal principal) {
         return new ResponseEntity(formationRecipeService.copy(id,name,principal), HttpStatus.CREATED);
     }
+
 }

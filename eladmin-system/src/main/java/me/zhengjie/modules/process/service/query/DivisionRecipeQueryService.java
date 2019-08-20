@@ -75,6 +75,39 @@ public class DivisionRecipeQueryService {
     }
 
     /**
+     * 根据配方名查找工步
+     * @param recipeName
+     * @return
+     */
+    @Cacheable(keyGenerator = "keyGenerator")
+    public List<String> queryDivisionStepName(String recipeName) {
+        DivisionRecipe divisionRecipe = divisionRecipeRepository.findByRecipeNameAndValid(recipeName, true);
+        List<WorkStepInfo> steps = workStepInfoRepository.findByRecipeId(divisionRecipe.getId());
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < steps.size(); i++) {
+            if (steps.get(i).getStroke().equals("cycle-start")) {
+                int m = 0;
+                int n=0;
+                for (int k = i + 1; k < steps.size(); k++) {
+                    if ("cycle-end".equals(steps.get(k).getStroke()) && steps.get(k).getCycleNumber().intValue() == steps.get(i).getCycleNumber().intValue()) {
+                        m = k - i;
+                        n=steps.get(k).getCycleNumber();
+                    }
+                }
+                for (int j = 0; j < steps.get(i).getCycleCount(); j++) {
+                    for (int z = 0; z < m; z++) {
+                        result.add("D-L" +n+"-"+ (j + 1) + "-" + steps.get(i + z + 1).getStroke());
+                    }
+                }
+            } else if (steps.get(i).getStroke().equals("CC") || steps.get(i).getStroke().equals("DC") || steps.get(i).getStroke().equals("DC-DV") || "CC-CV".equals(steps.get(i).getStroke())) {
+                result.add("D-"+steps.get(i).getStroke());
+            }
+
+        }
+        return result;
+    }
+
+    /**
      * 不分页
      */
     @Cacheable(keyGenerator = "keyGenerator")

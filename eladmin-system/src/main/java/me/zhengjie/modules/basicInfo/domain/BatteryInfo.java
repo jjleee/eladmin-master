@@ -82,8 +82,8 @@ public class BatteryInfo implements Serializable {
     /**
      * 分档规则
      */
-    @Column(name = "binning_rule_name")
-    private String binningRuleName;
+    @Column(name = "binning_Plan_name")
+    private String binningPlanName;
 
     /**
      * NG规则

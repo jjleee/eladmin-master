@@ -10,7 +10,7 @@ import java.io.Serializable;
 */
 @Entity
 @Data
-@Table(name="experiment_battery")
+@Table(name="experiment_battery",uniqueConstraints = {@UniqueConstraint(columnNames="battery_number")})
 public class ExperimentBattery implements Serializable {
 
     /**

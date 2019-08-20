@@ -47,19 +47,6 @@ public class BinningRuleQueryService {
         Page<BinningRule> page = binningRuleRepository.findAll(new Spec(binningRule), pageable);
         return PageUtil.toPage(page.map(binningRuleMapper::toDto));
     }
-
-    /**
-     * 查询所有名称
-     *
-     * @return
-     */
-    @Cacheable(keyGenerator = "keyGenerator")
-    public Object queryAllName() {
-        List<BinningRule> all = binningRuleRepository.findAll();
-        List<String> allName = all.stream().map(e -> e.getName()).collect(Collectors.toList());
-        return allName;
-    }
-
     /**
      * 不分页
      */
@@ -80,19 +67,6 @@ public class BinningRuleQueryService {
         public Predicate toPredicate(Root<BinningRule> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
 
             List<Predicate> list = new ArrayList<Predicate>();
-
-            if (!ObjectUtils.isEmpty(binningRule.getName())) {
-                /**
-                 * 模糊
-                 */
-                list.add(cb.like(root.get("name").as(String.class), "%" + binningRule.getName() + "%"));
-            }
-            if (!ObjectUtils.isEmpty(binningRule.getBatteryNumber())) {
-                /**
-                 * 模糊
-                 */
-                list.add(cb.like(root.get("battery_number").as(String.class), "%" + binningRule.getBatteryNumber() + "%"));
-            }
             Predicate[] p = new Predicate[list.size()];
             return cb.and(list.toArray(p));
         }

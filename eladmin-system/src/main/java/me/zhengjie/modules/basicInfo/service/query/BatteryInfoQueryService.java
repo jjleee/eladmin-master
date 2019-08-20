@@ -21,9 +21,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -64,7 +62,7 @@ public class BatteryInfoQueryService {
         batteryInfoVO.setDcrRecipeName(entity.getDcrRecipeName());
         batteryInfoVO.setChargeRecipeName(entity.getChargeRecipeName());
         batteryInfoVO.setProtectParamName(entity.getProtectParamName());
-        batteryInfoVO.setBinningRuleName(entity.getBinningRuleName());
+        batteryInfoVO.setBinningPlanName(entity.getBinningPlanName());
         batteryInfoVO.setNgRuleName(entity.getNgRuleName());
         batteryInfoVO.setCreatorName(entity.getCreatorName());
         batteryInfoVO.setCreateTime(entity.getCreateTime());
@@ -86,6 +84,17 @@ public class BatteryInfoQueryService {
         List<BatteryInfo> all = batteryInfoRepository.findAll();
         List<String> allName = all.stream().map(e -> e.getNumber()).collect(Collectors.toList());
         return allName;
+    }
+    public Map<String,String> queryRecipeName(String batteryNumber) {
+        BatteryInfo byNumber = batteryInfoRepository.findByNumber(batteryNumber);
+        String formationRecipeName = byNumber.getFormationRecipeName();
+        String divisionRecipeName = byNumber.getDivisionRecipeName();
+        String chargeRecipeName = byNumber.getChargeRecipeName();
+        Map map=new HashMap(15);
+        map.put("formation",formationRecipeName);
+        map.put("division",divisionRecipeName);
+        map.put("discharge",chargeRecipeName);
+        return map;
     }
 
     /**

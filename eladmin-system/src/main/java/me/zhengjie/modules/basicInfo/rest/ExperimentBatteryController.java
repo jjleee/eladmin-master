@@ -45,6 +45,9 @@ public class ExperimentBatteryController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
+        if(experimentBatteryQueryService.queryByNumber(resources.getBatteryNumber())!=null){
+            throw new BadRequestException("该型号已经存在!");
+        }
         return new ResponseEntity(experimentBatteryService.create(resources),HttpStatus.CREATED);
     }
 

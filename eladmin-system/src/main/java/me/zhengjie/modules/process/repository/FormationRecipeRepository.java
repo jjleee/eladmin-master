@@ -21,4 +21,14 @@ public interface FormationRecipeRepository extends JpaRepository<FormationRecipe
      */
     List<FormationRecipe> findAllByValidAndRecipeType(Boolean valid,Integer recipeType);
 
+    /**
+     * 根据名称查找配方
+     * @param name
+     * @param valid
+     * @return
+     */
+    FormationRecipe findByNameAndValid(String name,Boolean valid);
+
+    List<FormationRecipe> findAllByValid(Boolean valid);
+
 }

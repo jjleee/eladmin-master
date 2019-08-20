@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 * @date 2019-08-02
 */
 public interface ExperimentBatteryRepository extends JpaRepository<ExperimentBattery, Long>, JpaSpecificationExecutor {
+    ExperimentBattery findByBatteryNumber(String numner);
 }

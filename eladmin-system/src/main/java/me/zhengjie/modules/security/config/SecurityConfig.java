@@ -111,7 +111,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").anonymous()
 
                 // 所有请求都需要认证
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                // 防止iframe 造成跨域
+                .and().headers().frameOptions().disable();
 
         httpSecurity
                 .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);

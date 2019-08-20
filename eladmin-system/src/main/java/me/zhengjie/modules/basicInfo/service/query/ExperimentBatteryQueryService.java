@@ -46,6 +46,11 @@ public class ExperimentBatteryQueryService {
         return PageUtil.toPage(page.map(experimentBatteryMapper::toDto));
     }
 
+
+    public ExperimentBattery queryByNumber(String number){
+       return experimentBatteryRepository.findByBatteryNumber(number);
+    }
+
     /**
     * 不分页
     */

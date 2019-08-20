@@ -9,4 +9,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @date 2019-04-01
  */
 public interface BatteryInfoRepository extends JpaRepository<BatteryInfo, Long>, JpaSpecificationExecutor {
+
+    /**
+     * 根据型号查找
+     * @param number
+     * @return
+     */
+    BatteryInfo findByNumber(String number);
 }
