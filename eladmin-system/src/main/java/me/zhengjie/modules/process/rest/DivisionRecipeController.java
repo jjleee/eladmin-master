@@ -34,7 +34,6 @@ public class DivisionRecipeController {
 
     @Log("查询DivisionRecipe")
     @GetMapping(value = "/divisionRecipe")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity getDivisionRecipes(DivisionRecipeDTO resources, Pageable pageable) {
         return new ResponseEntity(divisionRecipeQueryService.queryAllPlus(resources, pageable), HttpStatus.OK);
     }
@@ -42,7 +41,6 @@ public class DivisionRecipeController {
 
     @Log("新增DivisionRecipe")
     @PostMapping(value = "/divisionRecipe")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity create(@Validated @RequestBody DivisionRecipeDTO resources) {
         if (resources.getId() != null && resources.getId() != "") {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -52,7 +50,6 @@ public class DivisionRecipeController {
 
     @Log("修改DivisionRecipe")
     @PutMapping(value = "/divisionRecipe")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity update(@Validated @RequestBody DivisionRecipeDTO resources, Principal principal) {
         if (resources.getId() == null) {
             throw new BadRequestException(ENTITY_NAME + " ID Can not be empty！");
@@ -63,7 +60,6 @@ public class DivisionRecipeController {
 
     @Log("删除DivisionRecipe")
     @DeleteMapping(value = "/divisionRecipe/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity delete(@PathVariable String id) {
         divisionRecipeService.delete(id);
         return new ResponseEntity(HttpStatus.OK);

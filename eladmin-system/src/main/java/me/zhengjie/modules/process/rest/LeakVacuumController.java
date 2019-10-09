@@ -36,14 +36,12 @@ public class LeakVacuumController {
 
     @Log("查询LeakVacuum")
     @GetMapping(value = "/leakVacuum")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity getLeakVacuums(LeakVacuumDTO resources, Pageable pageable) {
         return new ResponseEntity(leakVacuumQueryService.queryAll(resources, pageable), HttpStatus.OK);
     }
 
     @Log("新增LeakVacuum")
     @PostMapping(value = "/leakVacuum")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity create(@Validated @RequestBody LeakVacuum resources) {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -53,7 +51,6 @@ public class LeakVacuumController {
 
     @Log("修改LeakVacuum")
     @PutMapping(value = "/leakVacuum")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity update(@Validated @RequestBody LeakVacuum resources) {
         if (resources.getId() == null) {
             throw new BadRequestException(ENTITY_NAME + " ID Can not be empty");
@@ -64,7 +61,6 @@ public class LeakVacuumController {
 
     @Log("删除LeakVacuum")
     @DeleteMapping(value = "/leakVacuum/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         leakVacuumService.delete(id);
         return new ResponseEntity(HttpStatus.OK);

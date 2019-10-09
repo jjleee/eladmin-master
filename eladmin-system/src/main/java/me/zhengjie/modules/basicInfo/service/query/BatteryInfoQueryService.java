@@ -6,6 +6,7 @@ import me.zhengjie.modules.basicInfo.domain.BatteryInfo;
 import me.zhengjie.modules.basicInfo.service.dto.BatteryInfoDTO;
 import me.zhengjie.modules.basicInfo.repository.BatteryInfoRepository;
 import me.zhengjie.modules.basicInfo.service.mapper.BatteryInfoMapper;
+import me.zhengjie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -91,9 +92,15 @@ public class BatteryInfoQueryService {
         String divisionRecipeName = byNumber.getDivisionRecipeName();
         String chargeRecipeName = byNumber.getChargeRecipeName();
         Map map=new HashMap(15);
-        map.put("formation",formationRecipeName);
-        map.put("division",divisionRecipeName);
-        map.put("discharge",chargeRecipeName);
+        if(StringUtils.isNotEmpty(formationRecipeName)){
+            map.put("formation",formationRecipeName);
+        }
+        if(StringUtils.isNotEmpty(divisionRecipeName)){
+            map.put("division",divisionRecipeName);
+        }
+        if(StringUtils.isNotEmpty(chargeRecipeName)){
+            map.put("discharge",chargeRecipeName);
+        }
         return map;
     }
 

@@ -32,14 +32,12 @@ public class StepProtectParamController {
 
     @Log("查询StepProtectParam")
     @GetMapping(value = "/stepProtectParam")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity getStepProtectParams(StepProtectParamDTO resources, Pageable pageable) {
         return new ResponseEntity(stepProtectParamQueryService.queryAll(resources, pageable), HttpStatus.OK);
     }
 
     @Log("新增StepProtectParam")
     @PostMapping(value = "/stepProtectParam")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity create(@Validated @RequestBody StepProtectParam resources) {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -49,7 +47,6 @@ public class StepProtectParamController {
 
     @Log("修改StepProtectParam")
     @PutMapping(value = "/stepProtectParam")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity update(@Validated @RequestBody StepProtectParam resources) {
         if (resources.getId() == null) {
             throw new BadRequestException(ENTITY_NAME + " ID Can not be empty");
@@ -60,7 +57,6 @@ public class StepProtectParamController {
 
     @Log("删除StepProtectParam")
     @DeleteMapping(value = "/stepProtectParam/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         stepProtectParamService.delete(id);
         return new ResponseEntity(HttpStatus.OK);

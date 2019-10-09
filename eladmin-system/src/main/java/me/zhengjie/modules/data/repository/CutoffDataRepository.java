@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author jie
  * @date 2019-05-22
  */
-public interface CutoffDataRepository extends JpaRepository<CutoffData, Long>, JpaSpecificationExecutor {
+public interface CutoffDataRepository extends JpaRepository<CutoffData, String>, JpaSpecificationExecutor {
 }

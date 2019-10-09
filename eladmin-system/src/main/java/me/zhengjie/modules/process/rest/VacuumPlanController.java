@@ -32,14 +32,12 @@ public class VacuumPlanController {
 
     @Log("查询VacuumPlan")
     @GetMapping(value = "/vacuumPlan")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity getVacuumPlans(VacuumPlanDTO resources, Pageable pageable) {
         return new ResponseEntity(vacuumPlanQueryService.queryAll(resources, pageable), HttpStatus.OK);
     }
 
     @Log("新增VacuumPlan")
     @PostMapping(value = "/vacuumPlan")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity create(@Validated @RequestBody VacuumPlan resources) {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -49,7 +47,6 @@ public class VacuumPlanController {
 
     @Log("修改VacuumPlan")
     @PutMapping(value = "/vacuumPlan")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity update(@Validated @RequestBody VacuumPlan resources) {
         if (resources.getId() == null) {
             throw new BadRequestException(ENTITY_NAME + " ID Can not be empty");
@@ -60,7 +57,6 @@ public class VacuumPlanController {
 
     @Log("删除VacuumPlan")
     @DeleteMapping(value = "/vacuumPlan/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         vacuumPlanService.delete(id);
         return new ResponseEntity(HttpStatus.OK);

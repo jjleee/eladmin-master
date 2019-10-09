@@ -34,14 +34,12 @@ public class DischargeRecipeController {
 
     @Log("查询DischargeRecipe")
     @GetMapping(value = "/dischargeRecipe")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity getDischargeRecipes(DischargeRecipeDTO resources, Pageable pageable) {
         return new ResponseEntity(dischargeRecipeQueryService.queryAllPlus(resources, pageable), HttpStatus.OK);
     }
 
     @Log("新增DischargeRecipe")
     @PostMapping(value = "/dischargeRecipe")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity create(@Validated @RequestBody DischargeRecipeDTO resources) {
         if (resources.getId() != null && resources.getId() != "") {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -51,7 +49,6 @@ public class DischargeRecipeController {
 
     @Log("修改DischargeRecipe")
     @PutMapping(value = "/dischargeRecipe")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity update(@Validated @RequestBody DischargeRecipeDTO resources, Principal principal) {
         if (resources.getId() == null) {
             throw new BadRequestException(ENTITY_NAME + " ID Can not be empty");
@@ -62,7 +59,6 @@ public class DischargeRecipeController {
 
     @Log("删除DischargeRecipe")
     @DeleteMapping(value = "/dischargeRecipe/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity delete(@PathVariable String id) {
         dischargeRecipeService.delete(id);
         return new ResponseEntity(HttpStatus.OK);

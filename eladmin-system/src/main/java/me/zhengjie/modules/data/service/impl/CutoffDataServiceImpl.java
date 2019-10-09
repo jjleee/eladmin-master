@@ -28,7 +28,7 @@ public class CutoffDataServiceImpl implements CutoffDataService {
     private CutoffDataMapper cutoffDataMapper;
 
     @Override
-    public CutoffDataDTO findById(Long id) {
+    public CutoffDataDTO findById(String id) {
         Optional<CutoffData> cutoffData = cutoffDataRepository.findById(id);
         ValidationUtil.isNull(cutoffData, "CutoffData", "id", id);
         return cutoffDataMapper.toDto(cutoffData.get());
@@ -54,7 +54,7 @@ public class CutoffDataServiceImpl implements CutoffDataService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
+    public void delete(String id) {
         cutoffDataRepository.deleteById(id);
     }
 }

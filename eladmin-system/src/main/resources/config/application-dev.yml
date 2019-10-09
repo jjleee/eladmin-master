@@ -1,11 +1,14 @@
 #配置数据源
 spring:
+  mvc:
+    async:
+      request-timeout: 2000000
   datasource:
     druid:
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: oracle.jdbc.OracleDriver
-      url: jdbc:oracle:thin:@192.168.1.180:1521:ORCL
-      username: c##DGIS
+      url: jdbc:oracle:thin:@192.168.1.179:1521:ORCL
+      username: DGIS
       password: dgis110
 
       # 初始化连接大小
@@ -39,11 +42,14 @@ spring:
         url-pattern: /*
         exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
 
+
   #配置 Jpa
   jpa:
     hibernate:
       # 生产环境设置成 none，避免程序运行时自动更新数据库结构
       ddl-auto: update
+    show-sql: false
+
 
 #jwt
 jwt:

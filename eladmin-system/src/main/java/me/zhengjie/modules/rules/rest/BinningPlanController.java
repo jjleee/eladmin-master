@@ -40,7 +40,6 @@ public class BinningPlanController {
 
     @Log("查询BinningPlan")
     @GetMapping(value = "/binningPlan")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity getBinningPlans(BinningPlanDTO resources, Pageable pageable) {
         Object o = binningPlanQueryService.queryAll(resources, pageable);
         return new ResponseEntity(o, HttpStatus.OK);
@@ -48,7 +47,6 @@ public class BinningPlanController {
 
     @Log("新增BinningPlan")
     @PostMapping(value = "/binningPlan")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity create(@Validated @RequestBody BinningPlan resources) {
         if (resources.getPlanId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -59,7 +57,6 @@ public class BinningPlanController {
 
     @Log("修改BinningPlan")
     @PutMapping(value = "/binningPlan")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity update(@Validated @RequestBody BinningPlan resources) {
         if (resources.getPlanId() == null) {
             throw new BadRequestException(ENTITY_NAME + " ID Can not be empty");
@@ -71,12 +68,11 @@ public class BinningPlanController {
 
     @Log("删除BinningPlan")
     @DeleteMapping(value = "/binningPlan/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         binningPlanService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
-
+    @Log("获取分选方案")
     @GetMapping(value = "/binningPlan/names")
     public ResponseEntity getPlanNames() {
         return new ResponseEntity(binningPlanQueryService.queryAllName(), HttpStatus.OK);
@@ -84,7 +80,6 @@ public class BinningPlanController {
 
     @Log("获取工步名")
     @PostMapping(value = "/binningPlan/step/{batteryNumber}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity getStepNames(@Validated @PathVariable String batteryNumber) {
         return new ResponseEntity(binningPlanQueryService.queryAllStepName(batteryNumber), HttpStatus.OK);
     }

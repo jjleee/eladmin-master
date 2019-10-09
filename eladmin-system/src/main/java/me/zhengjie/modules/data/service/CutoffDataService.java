@@ -20,7 +20,7 @@ public interface CutoffDataService {
      * @return
      */
     @Cacheable(key = "#p0")
-    CutoffDataDTO findById(Long id);
+    CutoffDataDTO findById(String id);
 
     /**
      * create
@@ -45,5 +45,5 @@ public interface CutoffDataService {
      * @param id
      */
     @CacheEvict(allEntries = true)
-    void delete(Long id);
+    void delete(String id);
 }

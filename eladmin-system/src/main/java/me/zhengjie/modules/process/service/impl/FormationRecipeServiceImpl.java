@@ -47,7 +47,7 @@ public class FormationRecipeServiceImpl implements FormationRecipeService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public FormationRecipeDTO create(FormationRecipeDTO resources) {
+    public FormationRecipeDTO create(FormationRecipeDTO resources,String name) {
 
         String recipeId = KeyUtil.genUniqueKey();
         for (WorkStepInfo workStepInfo : resources.getWorkStepInfos()) {
@@ -57,6 +57,8 @@ public class FormationRecipeServiceImpl implements FormationRecipeService {
         resources.setId(recipeId);
         BeanUtils.copyProperties(resources, formationRecipe);
         formationRecipe.setValid(true);
+        formationRecipe.setEditorName(name);
+        formationRecipe.setUpdaterName(name);
         formationRecipe.setVersion(1);
         return formationRecipeMapper.toDto(formationRecipeRepository.save(formationRecipe));
     }

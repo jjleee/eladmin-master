@@ -32,14 +32,12 @@ public class GlobalProtectParamController {
 
     @Log("查询GlobalProtectParam")
     @GetMapping(value = "/globalProtectParam")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity getglobalProtectParams(GlobalProtectParamDTO resources, Pageable pageable) {
         return new ResponseEntity(globalProtectParamQueryService.queryAll(resources, pageable), HttpStatus.OK);
     }
 
     @Log("新增GlobalProtectParam")
     @PostMapping(value = "/globalProtectParam")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity create(@Validated @RequestBody GlobalProtectParam resources) {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -49,7 +47,6 @@ public class GlobalProtectParamController {
 
     @Log("修改GlobalProtectParam")
     @PutMapping(value = "/globalProtectParam")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity update(@Validated @RequestBody GlobalProtectParam resources) {
         if (resources.getId() == null) {
             throw new BadRequestException(ENTITY_NAME + " ID Can not be empty");
@@ -60,7 +57,6 @@ public class GlobalProtectParamController {
 
     @Log("删除GlobalProtectParam")
     @DeleteMapping(value = "/globalProtectParam/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         globalProtectParamService.delete(id);
         return new ResponseEntity(HttpStatus.OK);

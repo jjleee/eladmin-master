@@ -1,5 +1,4 @@
 package me.zhengjie.modules.process.service.query;
-
 import me.zhengjie.modules.process.domain.WorkStepInfo;
 import me.zhengjie.modules.process.repository.WorkStepInfoRepository;
 import me.zhengjie.utils.PageUtil;
@@ -55,19 +54,18 @@ public class FormationRecipeQueryService {
 
     @Cacheable(keyGenerator = "keyGenerator")
     public Object queryAllPlus(FormationRecipeDTO resource, Pageable pageable) {
-        List all = formationRecipeRepository.findAll(new Spec(resource));
+        Page<FormationRecipe> page = formationRecipeRepository.findAll(new Spec(resource), pageable);
         List<FormationRecipeDTO> dtos = new ArrayList<>();
-        for (Iterator<FormationRecipe> iterator = all.iterator(); iterator.hasNext(); ) {
+        for (Iterator<FormationRecipe> iterator = page.getContent().iterator(); iterator.hasNext(); ) {
             FormationRecipe next = iterator.next();
-            if (next.getValid()) {
-                FormationRecipeDTO formationRecipeDTO = new FormationRecipeDTO();
-                BeanUtils.copyProperties(next, formationRecipeDTO);
-                List<WorkStepInfo> byRecipeId = workStepInfoRepository.findByRecipeId(next.getId());
-                formationRecipeDTO.setWorkStepInfos(byRecipeId);
-                dtos.add(formationRecipeDTO);
-            }
+            FormationRecipeDTO formationRecipeDTO = new FormationRecipeDTO();
+            BeanUtils.copyProperties(next, formationRecipeDTO);
+            List<WorkStepInfo> byRecipeId = workStepInfoRepository.findByRecipeId(next.getId());
+            formationRecipeDTO.setWorkStepInfos(byRecipeId);
+            dtos.add(formationRecipeDTO);
         }
-        Page<FormationRecipeDTO> dtoPage = new PageImpl(dtos, pageable, dtos.size());
+
+        Page<FormationRecipeDTO> dtoPage = new PageImpl(dtos, pageable, page.getTotalElements());
         return PageUtil.toPage(dtoPage);
     }
 
@@ -91,24 +89,54 @@ public class FormationRecipeQueryService {
         for (int i = 0; i < steps.size(); i++) {
             if (steps.get(i).getStroke().equals("cycle-start")) {
                 int m = 0;
-                int n=0;
+                int n = 0;
                 for (int k = i + 1; k < steps.size(); k++) {
                     if ("cycle-end".equals(steps.get(k).getStroke()) && steps.get(k).getCycleNumber().intValue() == steps.get(i).getCycleNumber().intValue()) {
                         m = k - i;
-                        n=steps.get(k).getCycleNumber();
+                        n = steps.get(k).getCycleNumber();
                     }
                 }
                 for (int j = 0; j < steps.get(i).getCycleCount(); j++) {
                     for (int z = 0; z < m; z++) {
-                        result.add("F-L" +n+"-"+ (j + 1) + "-" + steps.get(i + z + 1).getStroke());
+                        result.add("F-L" + n + "-" + (j + 1) + "-" + steps.get(i + z + 1).getStroke());
                     }
                 }
             } else if (steps.get(i).getStroke().equals("CC") || steps.get(i).getStroke().equals("DC") || steps.get(i).getStroke().equals("DC-DV") || "CC-CV".equals(steps.get(i).getStroke())) {
-                result.add("F-"+steps.get(i).getStroke());
+                result.add("F-" + steps.get(i).getStroke());
             }
 
         }
         return result;
+    }
+
+    class Spec implements Specification<FormationRecipe> {
+
+        private FormationRecipeDTO formationRecipe;
+
+        public Spec(FormationRecipeDTO formationRecipe) {
+            this.formationRecipe = formationRecipe;
+        }
+
+        @Override
+        public Predicate toPredicate(Root<FormationRecipe> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
+
+            List<Predicate> list = new ArrayList<Predicate>();
+            list.add(cb.isTrue(root.get("valid").as(Boolean.class)));
+            if (!ObjectUtils.isEmpty(formationRecipe.getRecipeType())) {
+                /**
+                 * 模糊
+                 */
+                list.add(cb.equal(root.get("recipeType").as(Integer.class), formationRecipe.getRecipeType()));
+            }
+            if (!ObjectUtils.isEmpty(formationRecipe.getName())) {
+                /**
+                 * 模糊
+                 */
+                list.add(cb.like(root.get("name").as(String.class), "%" + formationRecipe.getName() + "%"));
+            }
+            Predicate[] p = new Predicate[list.size()];
+            return cb.and(list.toArray(p));
+        }
     }
 
     /**
@@ -120,31 +148,4 @@ public class FormationRecipeQueryService {
     }
 }
 
-class Spec implements Specification<FormationRecipe> {
 
-    private FormationRecipeDTO formationRecipe;
-
-    public Spec(FormationRecipeDTO formationRecipe) {
-        this.formationRecipe = formationRecipe;
-    }
-
-    @Override
-    public Predicate toPredicate(Root<FormationRecipe> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
-
-        List<Predicate> list = new ArrayList<Predicate>();
-        if (!ObjectUtils.isEmpty(formationRecipe.getRecipeType())) {
-            /**
-             * 模糊
-             */
-            list.add(cb.equal(root.get("recipeType").as(Integer.class), formationRecipe.getRecipeType()));
-        }
-        if (!ObjectUtils.isEmpty(formationRecipe.getName())) {
-            /**
-             * 模糊
-             */
-            list.add(cb.like(root.get("name").as(String.class), "%" + formationRecipe.getName() + "%"));
-        }
-        Predicate[] p = new Predicate[list.size()];
-        return cb.and(list.toArray(p));
-    }
-}

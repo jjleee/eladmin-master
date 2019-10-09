@@ -32,14 +32,12 @@ public class OcvRecipeController {
 
     @Log("查询OcvRecipe")
     @GetMapping(value = "/ocvRecipe")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity getOcvRecipes(OcvRecipeDTO resources, Pageable pageable) {
         return new ResponseEntity(ocvRecipeQueryService.queryAll(resources, pageable), HttpStatus.OK);
     }
 
     @Log("新增OcvRecipe")
     @PostMapping(value = "/ocvRecipe")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity create(@Validated @RequestBody OcvRecipe resources) {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -49,7 +47,6 @@ public class OcvRecipeController {
 
     @Log("修改OcvRecipe")
     @PutMapping(value = "/ocvRecipe")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity update(@Validated @RequestBody OcvRecipe resources) {
         if (resources.getId() == null) {
             throw new BadRequestException(ENTITY_NAME + " ID Can not be empty");
@@ -60,7 +57,6 @@ public class OcvRecipeController {
 
     @Log("删除OcvRecipe")
     @DeleteMapping(value = "/ocvRecipe/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity delete(@PathVariable Long id) {
         ocvRecipeService.delete(id);
         return new ResponseEntity(HttpStatus.OK);

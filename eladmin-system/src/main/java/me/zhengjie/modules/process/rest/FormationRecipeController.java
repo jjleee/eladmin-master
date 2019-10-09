@@ -37,24 +37,21 @@ public class FormationRecipeController {
 
     @Log("查询FormationRecipe")
     @GetMapping(value = "/formationRecipe")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity getFormationRecipes(FormationRecipeDTO resources, Pageable pageable) {
         return new ResponseEntity(formationRecipeQueryService.queryAllPlus(resources, pageable), HttpStatus.OK);
     }
 
     @Log("新增FormationRecipe")
     @PostMapping(value = "/formationRecipe")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity create(@Validated @RequestBody FormationRecipeDTO resources) {
+    public ResponseEntity create(@Validated @RequestBody FormationRecipeDTO resources,Principal principal) {
         if (resources.getId() != null && resources.getId() != "") {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
         }
-        return new ResponseEntity(formationRecipeService.create(resources), HttpStatus.CREATED);
+        return new ResponseEntity(formationRecipeService.create(resources,principal.getName()), HttpStatus.CREATED);
     }
 
     @Log("修改FormationRecipe")
     @PutMapping(value = "/formationRecipe")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity update(@Validated @RequestBody FormationRecipeDTO resources, Principal principal) {
         if (resources.getId() == null || resources.getId() == "") {
             throw new BadRequestException(ENTITY_NAME + " ID Can not be empty");
@@ -65,7 +62,6 @@ public class FormationRecipeController {
 
     @Log("删除FormationRecipe")
     @DeleteMapping(value = "/formationRecipe/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity delete(@PathVariable String id) {
         formationRecipeService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
@@ -78,7 +74,6 @@ public class FormationRecipeController {
 
     @Log("复制FormationRecipe")
     @PostMapping(value = "/formationRecipe/copy")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity copy(@RequestParam(value = "id" ) String id,@RequestParam(value = "name") String name,Principal principal) {
         return new ResponseEntity(formationRecipeService.copy(id,name,principal), HttpStatus.CREATED);
     }

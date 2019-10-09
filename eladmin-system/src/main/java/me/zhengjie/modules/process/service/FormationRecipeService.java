@@ -30,7 +30,7 @@ public interface FormationRecipeService {
      * @return
      */
     @CacheEvict(allEntries = true)
-    FormationRecipeDTO create(FormationRecipeDTO resources);
+    FormationRecipeDTO create(FormationRecipeDTO resources,String name);
 
     /**
      * copy

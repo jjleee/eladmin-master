@@ -19,6 +19,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,29 +67,26 @@ public class CutoffDataQueryService {
         public Predicate toPredicate(Root<CutoffData> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
 
             List<Predicate> list = new ArrayList<Predicate>();
-            if (!ObjectUtils.isEmpty(cutoffData.getLineName())) {
-                list.add(cb.equal(root.get("lineName").as(String.class),cutoffData.getLineName()));
+            if (!ObjectUtils.isEmpty(cutoffData.getLineNo())) {
+                list.add(cb.equal(root.get("lineNo").as(String.class),cutoffData.getLineNo()));
             }
-            if (!ObjectUtils.isEmpty(cutoffData.getCabinetNo())) {
-                list.add(cb.equal(root.get("cabinetNo").as(Integer.class),cutoffData.getCabinetNo()));
+            if (!ObjectUtils.isEmpty(cutoffData.getCabNo())) {
+                list.add(cb.equal(root.get("cabNo").as(Integer.class),cutoffData.getCabNo()));
             }
             if (!ObjectUtils.isEmpty(cutoffData.getCellNo())) {
                 list.add(cb.equal(root.get("cellNo").as(String.class),cutoffData.getCellNo()));
             }
-            if (!ObjectUtils.isEmpty(cutoffData.getChannel())) {
-                list.add(cb.equal(root.get("channel").as(String.class),cutoffData.getChannel()));
-            }
-            if (!ObjectUtils.isEmpty(cutoffData.getStepName())) {
-                list.add(cb.equal(root.get("stepName").as(String.class),cutoffData.getStepName()));
-            }
-            if (!ObjectUtils.isEmpty(cutoffData.getStepName())) {
-                list.add(cb.equal(root.get("stepName").as(String.class),cutoffData.getStepName()));
+            if (!ObjectUtils.isEmpty(cutoffData.getChannelNo())) {
+                list.add(cb.equal(root.get("channelNo").as(String.class),cutoffData.getChannelNo()));
             }
             if (!ObjectUtils.isEmpty(cutoffData.getStepNo())) {
-                list.add(cb.equal(root.get("stepNo").as(Integer.class),cutoffData.getStepNo()));
+                list.add(cb.equal(root.get("stepNo").as(String.class),cutoffData.getStepNo()));
+            }
+            if (!ObjectUtils.isEmpty(cutoffData.getStepType())) {
+                list.add(cb.equal(root.get("stepType").as(String.class),cutoffData.getStepType()));
             }
             if (!ObjectUtils.isEmpty(cutoffData.getTime1())&&!ObjectUtils.isEmpty(cutoffData.getTime2())) {
-                list.add(cb.between(root.get("recordTime").as(String.class),cutoffData.getTime1(),cutoffData.getTime2()));
+                list.add(cb.between(root.get("currentTime").as(Long.class),cutoffData.getTime1(),cutoffData.getTime2()));
             }
             Predicate[] p = new Predicate[list.size()];
             return cb.and(list.toArray(p));

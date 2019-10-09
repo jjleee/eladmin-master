@@ -1,18 +1,21 @@
 package me.zhengjie.modules.data.rest;
 
 import me.zhengjie.aop.log.Log;
-import me.zhengjie.exception.BadRequestException;
+import me.zhengjie.client.ProviderClient;
 import me.zhengjie.modules.data.domain.ProcessData;
-import me.zhengjie.modules.data.service.ProcessDataService;
 import me.zhengjie.modules.data.service.dto.ProcessDataDTO;
-import me.zhengjie.modules.data.service.query.ProcessDataQueryService;
+import me.zhengjie.utils.PageUtil;
+import me.zhengjie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author jie
@@ -23,46 +26,40 @@ import org.springframework.web.bind.annotation.*;
 public class ProcessDataController {
 
     @Autowired
-    private ProcessDataService processDataService;
-
-    @Autowired
-    private ProcessDataQueryService processDataQueryService;
+    ProviderClient providerClient;
 
     private static final String ENTITY_NAME = "processData";
 
     @Log("查询ProcessData")
-    @GetMapping(value = "/processData")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity getProcessDatas(ProcessDataDTO resources, Pageable pageable) {
-        return new ResponseEntity(processDataQueryService.queryAll(resources, pageable), HttpStatus.OK);
-    }
-
-    @Log("新增ProcessData")
-    @PostMapping(value = "/processData")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity create(@Validated @RequestBody ProcessData resources) {
-        if (resources.getId() != null) {
-            throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
+    @GetMapping("/processData")
+    public ResponseEntity getProcessDatas(ProcessDataDTO processData, Pageable pageable) {
+        final String tableName = "lbfs";
+        String start = null;
+        String end = null;
+        String prefix = null;
+        List<ProcessData> hi =new ArrayList<>();
+        if (processData.getChannelNo()!=null) {
+            start = String.format("%d-%d-%d-%d-%d", processData.getLineNo(),
+                    processData.getCabNo(), processData.getCellNo(), processData.getChannelNo(), processData.getStartTime());
+            end = String.format("%d-%d-%d-%d-%d", processData.getLineNo(), processData.getCabNo(),
+                    processData.getCellNo(), processData.getChannelNo(), processData.getEndTime());
+            prefix = String.format("%d-%d-%d-%d", processData.getLineNo(), processData.getCabNo(),
+                    processData.getCellNo(), processData.getChannelNo());
+            hi = providerClient.hi(tableName, prefix, start, end);
+        } else {
+            for (int i=1;i<49;i++){
+                start = String.format("%d-%d-%d-"+i+"-%d", processData.getLineNo(),
+                        processData.getCabNo(), processData.getCellNo(), processData.getStartTime());
+                end = String.format("%d-%d-%d-"+i+"-%d", processData.getLineNo(), processData.getCabNo(),
+                        processData.getCellNo(),  processData.getEndTime());
+                prefix = String.format("%d-%d-%d-"+i, processData.getLineNo(), processData.getCabNo(),
+                        processData.getCellNo());
+                List<ProcessData> dataList = providerClient.hi(tableName, prefix, start, end);
+                hi.addAll(dataList);
+            }
         }
-        return new ResponseEntity(processDataService.create(resources), HttpStatus.CREATED);
-    }
-
-    @Log("修改ProcessData")
-    @PutMapping(value = "/processData")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity update(@Validated @RequestBody ProcessData resources) {
-        if (resources.getId() == null) {
-            throw new BadRequestException(ENTITY_NAME + " ID Can not be empty");
-        }
-        processDataService.update(resources);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
-
-    @Log("删除ProcessData")
-    @DeleteMapping(value = "/processData/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity delete(@PathVariable Long id) {
-        processDataService.delete(id);
-        return new ResponseEntity(HttpStatus.OK);
+        List pageList = PageUtil.toPage(pageable.getPageNumber(), 20000, hi);
+        Page page = new PageImpl(pageList,pageable,hi.size());
+        return new ResponseEntity(PageUtil.toPage(page), HttpStatus.OK);
     }
 }

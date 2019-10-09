@@ -32,14 +32,12 @@ public class WorkStepInfoController {
 
     @Log("查询WorkStepInfo")
     @GetMapping(value = "/workStepInfo")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity getWorkStepInfos(WorkStepInfoDTO resources, Pageable pageable) {
         return new ResponseEntity(workStepInfoQueryService.queryAll(resources, pageable), HttpStatus.OK);
     }
 
     @Log("新增WorkStepInfo")
     @PostMapping(value = "/workStepInfo")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity create(@Validated @RequestBody WorkStepInfo resources) {
         if (resources.getId() != null) {
             throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
@@ -49,7 +47,6 @@ public class WorkStepInfoController {
 
     @Log("修改WorkStepInfo")
     @PutMapping(value = "/workStepInfo")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity update(@Validated @RequestBody WorkStepInfo resources) {
         if (resources.getId() == null) {
             throw new BadRequestException(ENTITY_NAME + " ID Can not be empty");
@@ -60,7 +57,6 @@ public class WorkStepInfoController {
 
     @Log("删除WorkStepInfo")
     @DeleteMapping(value = "/workStepInfo/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity delete(@PathVariable String id) {
         workStepInfoService.delete(id);
         return new ResponseEntity(HttpStatus.OK);

@@ -32,37 +32,7 @@ public class CutoffDataController {
 
     @Log("查询CutoffData")
     @GetMapping(value = "/cutoffData")
-//    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity getCutoffDatas(CutoffDataDTO resources) {
-        return new ResponseEntity(cutoffDataQueryService.queryAll(resources), HttpStatus.OK);
-    }
-
-    @Log("新增CutoffData")
-    @PostMapping(value = "/cutoffData")
-//    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity create(@Validated @RequestBody CutoffData resources) {
-        if (resources.getId() != null) {
-            throw new BadRequestException("A new " + ENTITY_NAME + " cannot already have an ID");
-        }
-        return new ResponseEntity(cutoffDataService.create(resources), HttpStatus.CREATED);
-    }
-
-    @Log("修改CutoffData")
-    @PutMapping(value = "/cutoffData")
-//    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity update(@Validated @RequestBody CutoffData resources) {
-        if (resources.getId() == null) {
-            throw new BadRequestException(ENTITY_NAME + " ID Can not be empty");
-        }
-        cutoffDataService.update(resources);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
-
-    @Log("删除CutoffData")
-    @DeleteMapping(value = "/cutoffData/{id}")
-//    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity delete(@PathVariable Long id) {
-        cutoffDataService.delete(id);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity getCutoffDatas(CutoffDataDTO resources, Pageable pageable) {
+        return new ResponseEntity(cutoffDataQueryService.queryAll(resources,pageable), HttpStatus.OK);
     }
 }
