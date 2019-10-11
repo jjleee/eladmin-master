@@ -20,18 +20,6 @@
 
         <dependency>
             <groupId>me.zhengjie</groupId>
-            <artifactId>eladmin-generator</artifactId>
-            <version>1.5</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>me.zhengjie</groupId>
-                    <artifactId>eladmin-common</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>me.zhengjie</groupId>
             <artifactId>eladmin-tools</artifactId>
             <version>1.5</version>
         </dependency>

@@ -15,13 +15,12 @@ public interface ProviderClient {
     /**
      * 查询过程数据
      * @param tableName
-     * @param prefix
      * @param start
      * @param end
      * @return
      */
     @GetMapping("/hi")
-    List<ProcessData> hi(@RequestParam(value = "tableName",required = true)String tableName,@RequestParam(value = "prefix",required = true)String prefix,@RequestParam(value = "start", required = true) String start, @RequestParam(value = "end", required = true) String end);
+    List<ProcessData> hi(@RequestParam(value = "tableName",required = true)String tableName,@RequestParam(value = "start", required = true) String start, @RequestParam(value = "end", required = true) String end);
 }
 
 
