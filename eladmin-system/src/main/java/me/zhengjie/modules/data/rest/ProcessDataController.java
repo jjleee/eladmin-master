@@ -54,7 +54,7 @@ public class ProcessDataController {
                 hi.addAll(dataList);
             }
         }
-        List pageList = PageUtil.toPage(pageable.getPageNumber(), 10000, hi);
+        List pageList = PageUtil.toPage(pageable.getPageNumber(), 20000, hi);
         Page page = new PageImpl(pageList,pageable,hi.size());
         return new ResponseEntity(PageUtil.toPage(page), HttpStatus.OK);
     }
